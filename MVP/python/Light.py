@@ -54,18 +54,18 @@ def test():
     """
     lght=Light()
     
-    print "Test Light"
-    print "Light State: ", lght.get_state(True)
-    print "Turn Light On"
+    print("Test Light")
+    print("Light State: ", lght.get_state(True))
+    print("Turn Light On")
     lght.set_on(True)
-    print "Light State: ", lght.get_state(True)
-    print "Turn Light Off"        
+    print("Light State: ", lght.get_state(True))
+    print("Turn Light Off")
     lght.set_off(True)
-    print "Light State: ", lght.get_state(True)
-    print "Turn Light On"        
+    print("Light State: ", lght.get_state(True))
+    print("Turn Light On"        )
     lght.set_on(True)
-    print "Light State: ", lght.get_state(True)
-    print "Done"
+    print("Light State: ", lght.get_state(True))
+    print("Done")
 
 if __name__=="__main__":
     test()    

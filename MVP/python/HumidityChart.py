@@ -17,7 +17,7 @@ def getResults(test=False):
     payload={"selector":{"start_date.timestamp":{"$lt":ts}, "status.status_qualifier":"Success", "activity_type":"Environment_Observation", "subject.name":"Air","subject.attribute.name": "Humidity"}, "fields":["start_date.timestamp", "subject.attribute.value"], "sort":[{"start_date.timestamp":"desc"}], "limit":250}        
     db_name = 'mvp_data'
     if test:
-        print payload
+        print(payload)
     server = Server()
     db = server[db_name]
     return db.find(payload)
@@ -27,7 +27,7 @@ def buildChart(data):
     v_lst=[]
     ts_lst=[]
     for row in data:
-#        print row["start_date"]["timestamp"], row["subject"]["attribute"]["value"]
+#        print(row["start_date"]["timestamp"], row["subject"]["attribute"]["value"])
         v_lst.append(float(row["subject"]["attribute"]["value"]))
         ts_lst.append(row["start_date"]["timestamp"])
 
@@ -48,19 +48,19 @@ def buildTempChart():
     data=getResults(True)
     r_cnt=len(data)    
     if r_cnt>0:
-        print "Records: ", r_cnt
+        print("Records: ", r_cnt)
         buildChart(data)
     else:
-        print "No records selected"
+        print("No records selected")
 
 def test():
     data=getResults()
     r_cnt=len(data)    
     if r_cnt>0:
-        print "Records: ", r_cnt
+        print("Records: ", r_cnt)
         buildChart(data)
     else:
-        print "No records selected"
+        print("No records selected")
 
 if __name__=="__main__":
     buildTempChart()

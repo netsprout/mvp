@@ -3,7 +3,7 @@
 
  Author : Howard Webb
  Date   : 06/20/2018
- 
+
 """
 
 from periphery import I2C as pI2C
@@ -32,19 +32,19 @@ class I2C(object):
            Raises:
                None
        """
-   #    print "Get Msg1"
+   #    print("Get Msg1")
    #    for cmd in cmds:
-   #        print "Cmd: ", hex(cmd)
-   #    print "Buffer:", size        
+   #        print("Cmd: ", hex(cmd))
+   #    print("Buffer:", size)
        msgs = [self._i2c.Message(cmds), self._i2c.Message(bytearray([0x00 for x in range(size)]), read=True)]
        try:
            self._i2c.transfer(self._addr, msgs)
            ret = msgs[1].data
    #        for data in ret:
-   #            print "Data:", hex(data)
+   #            print("Data:", hex(data))
            return msgs
        except Exception as e:
-           print e
+           print(e)
            return None
 
 
@@ -57,18 +57,18 @@ class I2C(object):
            Raises:
                None
       """
-   #    print "Msg Write"
+   #    print("Msg Write")
    #    for cmd in cmds:
-   #        print hex(cmd)
+   #        print(hex(cmd))
        msgs = [self._i2c.Message(cmds)]
        try:
            self._i2c.transfer(self._addr, msgs)
    #        msb = msgs[0].data[0]
-   #        print "MSB", hex(msb)
+   #        print("MSB", hex(msb))
            return msgs
 
        except Exception as e:
-           print e
+           print(e)
            return None
 
    def msg_read(self, size):
@@ -82,20 +82,20 @@ class I2C(object):
            Raises:
                None
       """
-           
-   #    print "Msg Read", size
+
+   #    print("Msg Read", size)
        msgs = [self._i2c.Message(bytearray([0x00 for x in range(size)]), read=True)]
        try:
            self._i2c.transfer(self._addr, msgs)
            msb = msgs[0].data[0]
            lsb = msgs[0].data[1]
            checksum = msgs[0].data[2]
-   #        print "MSB", msb, "LSB:", lsb, "Checksum:", checksum
-           return msgs 
+   #        print("MSB", msb, "LSB:", lsb, "Checksum:", checksum)
+           return msgs
 
        except Exception as e:
-           print e
-           return None    
+           print(e)
+           return None
 
 def bytesToWord(high, low):
    """Convert two byte buffers into a single word value
