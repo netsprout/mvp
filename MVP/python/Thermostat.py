@@ -5,8 +5,7 @@
 
 """
 from Fan import Fan
-from SI7021 import SI7021
-
+from TempSensor import TempSensor
 
 def adjust_thermostat(temp=None, test=False):
     """Adjust the fan depending upon the temperature
@@ -18,10 +17,11 @@ def adjust_thermostat(temp=None, test=False):
                None
     """
     if temp == None:
-        temp_sensor = SI7021()
-        temp = temp_sensor.get_tempC()
+        sensor = TempSensor().sensor
+        temp = senor.get_celsius()
     fan = Fan()
     fan.adjust(temp, test)
+
 
 def test():
     """Self test
@@ -32,16 +32,13 @@ def test():
            Raises:
                None
     """
-    print "Test"
+    print("Test")
     adjust_thermostat(40, True)
-    print "Adjust Thermostat 40"
+    print("Adjust Thermostat 40")
     adjust_thermostat(20, True)
-    print "Adjust Thermostat 20"
+    print("Adjust Thermostat 20")
     adjust_thermostat(None, True)
-    print "Adjust Thermostat None"
+    print("Adjust Thermostat None")
 
 if __name__ == "__main__":
     adjust_thermostat()
-
-
-

@@ -30,7 +30,7 @@ def cleanData(data, test=False):
     '''Flatten structure to three columns'''
     out=[]
     for row in data:
-#        print row
+#        print(row)
         hold={}
         # bin the timestamp into 20 minute groups
         # get only the first 19 characters of the timestamp
@@ -54,8 +54,8 @@ def buildChart(data, test=False):
     # Pivot the data by timestamp-bin with name groupings for columns
     df=df.pivot(index='timestamp', columns='name', values='value')
     if test:
-        print df
-#    print df
+        print(df)
+#    print(df)
 
 # Fill missing data with dummy value
     df=df.fillna(11.1)
@@ -72,19 +72,19 @@ def buildChart(data, test=False):
     # Make numeric (except for dates) - this does not seem to be working
     d1.apply(pd.to_numeric, errors='ignore')
 
-#    print d1
+#    print(d1)
 
 # Calculate dew point
     dp=[]
     for idx, row in d1.iterrows():
-#        print row
+#        print(row)
         dp.append(getDewPoint(float(row['Temperature']), float(row['Humidity'])))
     d1['Dewpoint']=dp
 
 # Clear index so all are columns
     d3=d1.reset_index()
     if test:
-        print d3
+        print(d3)
 
 #build chart
     line_chart = pygal.Line(range=(0, 40))
@@ -101,21 +101,21 @@ def getDewPointChart(test=False):
     data=getResults()
     r_cnt = len(data)
     if r_cnt>0:
-        print "Records: ", r_cnt
+        print("Records: ", r_cnt)
         data=cleanData(data, test)
         buildChart(data, test)
     else:
-        print "No Data"
+        print("No Data")
 
 def test():
     data=getResults()
     r_cnt = len(data)
     if r_cnt>0:
-        print "Records: ", r_cnt
+        print("Records: ", r_cnt)
         data=cleanData(data, test)
         buildChart(data, test)
     else:
-        print "No Data"
+        print("No Data")
 
 if __name__=="__main__":
     getDewPointChart()

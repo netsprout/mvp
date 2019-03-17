@@ -52,10 +52,10 @@ def test():
     Raises:
         None
     """
-    print "Test MvpLogger"
-    print "Getting logger"
+    print("Test MvpLogger")
+    print("Getting logger")
     logger = get_logger()
-    print "Testing output"
+    print("Testing output")
     logger.debug("Something happening here")
     logger.info("Just thought you might like to know")
     logger.warning("Will Robinson ...")

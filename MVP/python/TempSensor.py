@@ -1,48 +1,47 @@
 """
-SI7021 humidity and temperature sensor
+Abstracted humidity and temperature sensor
 Technical notes of commands and operation and from:
 https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf
-
- Author : Howard Webb
- Date   : 06/20/2018
- 
 """
-
+SENSOR_TYPE = 'AM2315'
 
 import time
-from I2CUtil import I2C, bytesToWord
 
+if SENSOR_TYPE == 'AM2315':
+  from AM2315 import *
+else:
+  from SI7021 import SI7021
 
-# Device I2C address
-addr = 0x40
-rh_no_hold = 0xF5      # Use and do own time hold
-previous_temp = 0xE0   # Works but should not use
-
-rh_hold = 0xE5         # Not used
-temp_hold = 0XE3       # Not used
-temp_no_hold = 0xF3    # Use but do own hold
-temp_from_rh = 0xE0    # Not used
-reset_cmd = 0xFE       # Available
-write_reg_1 = 0xE6     # Not used
-read_reg_1 = 0xE7      # Not used
-# Heater control
-write_heater_reg = 0x51 # Not doing callibration and fancy stuff at this time
-read_heater_reg = 0x11  # ditto
-# Unique ID for this chip
-read_id_1_1 = 0xFA     # Available option
-read_id_1_2 = 0x0F     # Available option
-read_id_2_1 = 0xFC     # Available option
-read_id_2_2 = 0xC9     # Available option
-# Firmware revision
-firm_rev_1_1 = 0x84
-firm_rev_1_2 = 0x88
-
-class SI7021(object):
+class TempSensor(object):
 
    def __init__(self):
-      self._addr = addr
-      self._i2c = I2C(addr)
- 
+      self.new_type = new_sensor(self)
+      self.current_sensor = set_sensor(self)
+
+   def sensor(self):
+      return self.current_sensor
+
+   def new_sensor(self):
+     return True if (SENSOR_TYPE == 'AM2315') else False
+
+   def set_sensor(self):
+     return AM2315() if self.new_type() else SI7021()
+
+   def check_celsius(self):
+     if self.new_type:
+       return self.sensor.temperature()
+     else:
+       return self.sensor.get_tempC()
+
+   def check_fahrenheit(self):
+     return (get_celsius(self.sensor) * 9/5) + 32
+
+   def check_humidity(self):
+     if self.new_type:
+       return self.sensor.humidity()
+     else:
+       return self.sensor.get_humidity()
+
    def calc_humidity(self, read):
       """Calculate relative humidity from sensor reading
            Args:
@@ -83,7 +82,7 @@ class SI7021(object):
            return None
        else:
            value = bytesToWord(msgs[1].data[0],msgs[1].data[1])
-           tempC = self.calc_temp(value) 
+           tempC = self.calc_temp(value)
            return tempC
 
    def get_humidity(self):
@@ -151,7 +150,7 @@ class SI7021(object):
               print("Unknown")
        else:
           print("No Revision Data Available")
-          return rev        
+          return rev
 
    def get_id1(self):
        """Print the first part of the chips unique id
@@ -178,7 +177,7 @@ class SI7021(object):
            Raises:
                None
        """
-           
+
        print("\nGet ID 2")
        msgs = self._i2c.get_msg([read_id_2_1, read_id_2_2], 4)
        ret= msgs[1].data
@@ -205,11 +204,11 @@ class SI7021(object):
            Raises:
                None
        """
-            
+
        print("\nReset")
        rev_1 = self._i2c.msg_write([reset_cmd])
        print("Reset: ", rev_1)
-    
+
 def test():
     """Test the SI7021 functions
         Args:
@@ -221,7 +220,7 @@ def test():
    """
     si = SI7021()
     print("\nTest Humidity - split")
-    rh = si.get_humidity()        
+    rh = si.get_humidity()
     if rh != None:
         print('Humidity : %.2f %%' % rh)
     else:
@@ -231,15 +230,15 @@ def test():
     temp = si.get_tempC()
     if temp == None:
         print("Error getting Temp")
-    else:        
-        print('Temp C: %.2f C' % temp)        
+    else:
+        print('Temp C: %.2f C' % temp)
 
 
     print("\nTest Temp - previous")
     temp = si.get_tempC_prior()
     if temp == None:
         print("Error getting Temp")
-    else:        
+    else:
         print('Temp C: %.2f C' % temp)
 
     si.reset()

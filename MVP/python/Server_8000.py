@@ -16,7 +16,7 @@ Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
 Handler.extensions_map['.svg']='image/svg+xml'
 httpd = SocketServer.TCPServer(("", PORT), Handler)
 
-print "serving at port", PORT
+print("serving at port", PORT)
 
 #Start the server running
 httpd.serve_forever()

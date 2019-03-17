@@ -181,28 +181,28 @@ def saveRec(rec):
 
     '''
     
-#    print rec
+#    print(rec)
     global db
     id, rev = db.save(rec)
     msg = "{} {}".format("Saved:", rec)
     logger.info(msg)
 
-#    print id, rev
+#    print(id, rev)
 
 def test():
-    print "Env Rec"
+    print("Env Rec")
     rec = ['Environment_Observation','', 'Left_Side', 'Air', 'Temperature', 27.5, 'fairenheight', 'SI7021', 'Success', '']
     saveList(rec)
-    print "Env Rec - Person"
+    print("Env Rec - Person")
     rec = ['Environment_Observation','', 'Reservoir', 'Nutrient', 'pH', 5.6, 'pH',['person','hmw'], 'Success', 'from bucket']
     saveList(rec)
-    print "Agro Rec"
+    print("Agro Rec")
     rec = ['Agronomic_Activity', 'd3ca243b-2740-4557-87f9-c07be9d929ad', 'Planted', '', '', '', '', ['person','hmw'], 'Success', '']
     saveList(rec)
-    print "Pheno Rec"
+    print("Pheno Rec")
     rec = ['Phenotype_Observation', 'd3ca243b-2740-4557-87f9-c07be9d929ad', 1,'Plant','Weight', 125, 'g', ['person','hmw'], 'Success', '']
     saveList(rec)
-    print "State Rec"
+    print("State Rec")
     rec = ['State_Change', '','Top', 'Light', 'state', 'ON', 'state', 'Light', 'Success', '']
     saveList(rec)
 

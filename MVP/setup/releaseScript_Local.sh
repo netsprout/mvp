@@ -42,7 +42,7 @@ echo  $(date +"%D %T") "python-periphery installed (needed for si7021 temp senso
 sudo pip install pygal|| error_exit "Failure to install pygal (needed for charting)"
 echo  $(date +"%D %T") "pygal installed (used for charting)"
 
-pip install  couchdb || error_exit "Failure to install CouchDB Python library"
+sudo pip install  couchdb || error_exit "Failure to install CouchDB Python library"
 echo  $(date +"%D %T") "CouchDB Python Library intalled"
 
 # https://www.raspberrypi.org/forums/viewtopic.php?t=142700
