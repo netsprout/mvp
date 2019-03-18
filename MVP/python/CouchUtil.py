@@ -7,6 +7,7 @@ from datetime import datetime
 from datetime import timedelta
 from env import env
 from LogUtil import get_logger
+from TempSensor import TempSensor
 
 NBR_PLANTS = 6
 TS = 0
@@ -48,11 +49,11 @@ def processEnv(row):
         None
 
     '''
-    
+
     rec = buildCore(row)
     rec['activity_type'] = row[ACTIVITY]
     rec['subject'] = {'name':row[SUBJECT],'attribute':{'name':row[ATTRIBUTE], 'units':row[UNITS], 'value': row[VALUE]}, 'location': row[PLOT]}
-    rec['location'] = {'field':row[FIELD]}    
+    rec['location'] = {'field':row[FIELD]}
     return rec
 
 def processState(row):
@@ -68,14 +69,14 @@ def processState(row):
         None
 
     '''
-    
+
     rec = buildCore(row)
     rec['activity_type'] = row[ACTIVITY]
     rec['subject'] = {'name':row[SUBJECT],'attribute':{'name':row[ATTRIBUTE], 'units':row[UNITS], 'value': row[VALUE]}, 'location': row[PLOT]}
-    rec['participant']= {'type':'device', 'name':row[PARTICIPANT]}    
-    rec['location'] = {'field':row[FIELD]}    
+    rec['participant']= {'type':'device', 'name':row[PARTICIPANT]}
+    rec['location'] = {'field':row[FIELD]}
     return rec
-    
+
 def processAgro(row):
     '''
     Agronomic specific processing
@@ -111,18 +112,18 @@ def processPheno(row):
         None
 
     '''
-    
+
     rec = buildCore(row)
     rec['activity_type'] = row[ACTIVITY]
     rec['subject'] = {'name':row[SUBJECT],'attribute':{'name':row[ATTRIBUTE], 'units':row[UNITS], 'value': row[VALUE]}}
-    rec['location'] = {'field':row[FIELD], 'trial':row[TRIAL], 'plot':row[PLOT]}    
+    rec['location'] = {'field':row[FIELD], 'trial':row[TRIAL], 'plot':row[PLOT]}
     return rec
 
 def buildCore(row):
     '''
     Build the core of the json structure, common elements
     Args:
-        row: list of activity 
+        row: list of activity
              [timestamp, field, activity_name, trial, plot, subject, attribute, value, units, participant, status_qualifier, comment]
              participant may be a device string, or a list: ['person':'hmw']
     Returns:
@@ -140,7 +141,7 @@ def buildCore(row):
         rec['participant']= {'type':'device', 'name':row[PARTICIPANT]}
     if len(row[COMMENT]) == 0:
         rec['status'] = {'status':'Complete', 'status_qualifier': row[STATUS]}
-    else:        
+    else:
         rec['status'] = {'status':'Complete', 'status_qualifier': row[STATUS], 'comment':row[COMMENT]}
     return rec
 
@@ -159,7 +160,7 @@ def saveList(doc):
 
     '''
     # dictionary of activity types and specific processing functions
-    proc = {'Environment_Observation':processEnv, 'State_Change':processState, 'Agronomic_Activity':processAgro, 'Phenotype_Observation':processPheno}    
+    proc = {'Environment_Observation':processEnv, 'State_Change':processState, 'Agronomic_Activity':processAgro, 'Phenotype_Observation':processPheno}
     # add timestamp and field_id
     timestamp = datetime.utcnow().isoformat()[:19]
     doc.insert(0, env['field']['field_id'])
@@ -167,7 +168,7 @@ def saveList(doc):
     # Use activity type to route processing
     rec = proc[doc[2]](doc)
     saveRec(rec)
-        
+
 def saveRec(rec):
     '''
     Persist json structure to a database
@@ -180,7 +181,7 @@ def saveRec(rec):
         None
 
     '''
-    
+
 #    print(rec)
     global db
     id, rev = db.save(rec)
@@ -191,7 +192,7 @@ def saveRec(rec):
 
 def test():
     print("Env Rec")
-    rec = ['Environment_Observation','', 'Left_Side', 'Air', 'Temperature', 27.5, 'fairenheight', 'SI7021', 'Success', '']
+    rec = ['Environment_Observation','', 'Left_Side', 'Air', 'Temperature', 27.5, 'fairenheight', TempSensor.SENSOR_TYPE, 'Success', '']
     saveList(rec)
     print("Env Rec - Person")
     rec = ['Environment_Observation','', 'Reservoir', 'Nutrient', 'pH', 5.6, 'pH',['person','hmw'], 'Success', 'from bucket']
@@ -206,6 +207,6 @@ def test():
     rec = ['State_Change', '','Top', 'Light', 'state', 'ON', 'state', 'Light', 'Success', '']
     saveList(rec)
 
-    
+
 if __name__=="__main__":
     test()

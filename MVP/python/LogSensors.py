@@ -1,44 +1,44 @@
 """ Log standard MVP sensors
 """
 
-from SI7021 import *
+from TempSensor import TempSensor
 from CouchUtil import saveList
 
 
 def log_sensors(test = False):
 
-    si=SI7021()
+    sensor = TempSensor()
 
     try:
-        temp = si.get_tempC()
+        temp = sensor.check_temperature()
 
         status = 'Success'
         if test:
             status = 'Test'
-        saveList(['Environment_Observation', '', 'Top', 'Air', 'Temperature', "{:10.1f}".format(temp), 'Farenheight', 'SI7021', status, ''])                
+        saveList(['Environment_Observation', '', 'Top', 'Air', 'Temperature', "{:10.1f}".format(temp), 'Farenheight', sensor.SENSOR_TYPE, status, ''])
     except Exception as e:
         status = 'Failure'
         if test:
             status = 'Test'
-        saveList(['Environment_Observation', '', 'Top', 'Air', 'Temperature', '', 'Farenheight', 'SI7021', status, str(e)])                            
+        saveList(['Environment_Observation', '', 'Top', 'Air', 'Temperature', '', 'Farenheight', sensor.SENSOR_TYPE, status, str(e)])
 
     try:
-        humid = si.get_humidity()
+        humid = sensor.check_humidity()
 
         status = 'Success'
         if test:
             status = 'Test'
-        saveList(['Environment_Observation', '', 'Top', 'Air', 'Humidity', "{:10.1f}".format(humid), 'Percent', 'SI7021', status, ''])                
-        
+        saveList(['Environment_Observation', '', 'Top', 'Air', 'Humidity', "{:10.1f}".format(humid), 'Percent', sensor.SENSOR_TYPE, status, ''])
+
     except Exception as e:
         status = 'Failure'
         if test:
             status = 'Test'
-        saveList(['Environment_Observation', '', 'Top', 'Air', 'Humidity', '', 'Percent', 'SI7021', status, str(e)])
-            
+        saveList(['Environment_Observation', '', 'Top', 'Air', 'Humidity', '', 'Percent', sensor.SENSOR_TYPE, status, str(e)])
+
 
 def test():
     log_sensors(True)
 
 if __name__=="__main__":
-    log_sensors()    
+    log_sensors()
