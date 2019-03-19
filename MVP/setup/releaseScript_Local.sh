@@ -38,11 +38,20 @@ echo  $(date +"%D %T") "fswebcam intalled (supports USB camera"
 sudo pip install python-periphery || error_exit "Failure to install python-periphery (needed for si7021 temp sensor)"
 echo  $(date +"%D %T") "python-periphery installed (needed for si7021 temp sensor)"
 
+# Needed for AM2315 Temp/Humidity Sensor
+sudo apt-get install python3-setuptools
+echo  $(date +"%D %T") "python3-setuptools installed (needed for AM2315 temp sensor)"
+# Install python SMBus and i2c-tools
+sudo apt-get install python-smbus
+echo  $(date +"%D %T") "python-smbus installed (needed for AM2315 temp sensor)"
+sudo adduser pi i2c
+
 # Used for charting
 sudo pip install pygal|| error_exit "Failure to install pygal (needed for charting)"
 echo  $(date +"%D %T") "pygal installed (used for charting)"
 
 sudo pip install  couchdb || error_exit "Failure to install CouchDB Python library"
+pip install  couchdb || error_exit "Failure to install CouchDB Python library"
 echo  $(date +"%D %T") "CouchDB Python Library intalled"
 
 # https://www.raspberrypi.org/forums/viewtopic.php?t=142700
