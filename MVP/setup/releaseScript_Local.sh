@@ -33,6 +33,8 @@ echo "##### Install Libraries #####"
 # FS Webcam
 sudo apt-get install fswebcam -y || error_exit "Failure to install fswebcam (USB Camera support)"
 echo  $(date +"%D %T") "fswebcam intalled (supports USB camera"
+# Missing Official V4L2 driver https://www.raspberrypi.org/forums/viewtopic.php?t=62364
+sudo modprobe bcm2835-v4l2
 
 # Needed for I2C
 sudo pip install python-periphery || error_exit "Failure to install python-periphery (needed for si7021 temp sensor)"
@@ -45,6 +47,13 @@ echo  $(date +"%D %T") "python3-setuptools installed (needed for AM2315 temp sen
 sudo apt-get install python-smbus
 echo  $(date +"%D %T") "python-smbus installed (needed for AM2315 temp sensor)"
 sudo adduser pi i2c
+
+## RPi.GPIO Library
+sudo pip install RPi.GPIO
+pip install RPi.GPIO
+
+## Create link for Temp Sensor AM2315
+sudo ln -s /dev/i2c-1 /dev/i2c-0
 
 # Used for charting
 sudo pip install pygal|| error_exit "Failure to install pygal (needed for charting)"

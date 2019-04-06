@@ -40,7 +40,7 @@ cd  $dir &> /dev/null
 if [ $? = 0 ]
 then
     printf "$dir OK\n"
-else 
+else
     error_exit "MVP Directory not found, failed to extract from Github"
 fi
 
@@ -72,14 +72,18 @@ fi
 
 printf "\n---Test Sensors---\n"
 
-echo "##### Test si7021 ####"
-cmd=$main_dir/python/SI7021.py
+#echo "##### Test si7021 ####"
+#cmd=$main_dir/python/SI7021.py
+echo "##### Test AM2315 ####"
+cmd=$main_dir/python/TempSensor.py
 python $cmd &> /dev/null
 if [ $? = 0 ]
 then
-    printf "SI7021 OK\n"
+    #printf "SI7021 OK\n"
+    printf "AM2315 OK\n"
 else
-    error_exit "Failure testing SI7021 sensor"
+    #error_exit "Failure testing SI7021 sensor"
+    error_exit "Failure testing AM2315 sensor"
 fi
 
 printf "\n---Test Data Logger---\n"
@@ -115,4 +119,3 @@ cmd7=$main_dir/scripts/Render.sh
 printf "Website render OK\n"
 
 printf "\n---Done---\n"
-

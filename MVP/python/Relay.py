@@ -9,12 +9,12 @@ from LogUtil import get_logger
 ON=1
 OFF=0
 
-Relay1 = 29 # Fan
-Relay2 = 31
-Relay3 = 33 # LED
-Relay4 = 35 # Solenoid
+Relay1 = 29 # PROBLEMS :(
+Relay2 = 31 # LIGHT
+Relay3 = 33 #
+Relay4 = 35 # FAN ----Solenoid
 
-lightPin=29
+lightPin=31
 fanPin=35
 
 class Relay(object):
@@ -26,8 +26,8 @@ class Relay(object):
         GPIO.setup(Relay2, GPIO.OUT)
         GPIO.setup(Relay3, GPIO.OUT)
         GPIO.setup(Relay4, GPIO.OUT)
-        self.logger = get_logger('Relay')        
-    
+        self.logger = get_logger('Relay')
+
     def set_state(self, pin, state, test=False):
         '''Change state if different'''
         msg = "{}, {}, {}".format("Current ", state, GPIO.input(pin))
@@ -56,7 +56,7 @@ class Relay(object):
         GPIO.output(pin, GPIO.HIGH)
 
 def test():
-    
+
     relay=Relay()
     print("Test")
     print("Read #3 Unknown: ", relay.get_state(Relay3))
@@ -69,20 +69,20 @@ def test():
     time.sleep(5)
     print("Turn Fan Off")
     relay.set_off(lightPin, True)
-    time.sleep(5)        
+    time.sleep(5)
     print("Turn Light Off")
     relay.set_off(lightPin, True)
     time.sleep(5)
 
     print("Conditional Turn Fan On")
     relay.set_state(fanPin, ON, True)
-    time.sleep(5)        
+    time.sleep(5)
     print("Conditional Turn Fan On")
     relay.set_state(fanPin, ON, True)
     time.sleep(5)
     print("Conditional Turn Fan Off")
     relay.set_state(fanPin, OFF, True)
-    time.sleep(5)        
+    time.sleep(5)
     print("Conditional Turn Fan Off")
     relay.set_state(fanPin, OFF, True)
 

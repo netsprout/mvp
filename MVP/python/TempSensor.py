@@ -9,21 +9,18 @@ class TempSensor(object):
    SENSOR_TYPE = 'AM2315' # SI7021
 
    def __init__(self):
-      self.new_type = new_sensor(self)
-      self.current_sensor = set_sensor(self)
+      self.new_type = True if (self.SENSOR_TYPE == 'AM2315') else False
+      self.current_sensor = self.set_sensor()
 
    def sensor(self):
       return self.current_sensor
 
-   def new_sensor(self):
-     return True if (SENSOR_TYPE == 'AM2315') else False
-
    def set_sensor(self):
-     return AM2315() if self.new_type() else SI7021()
+     return AM2315() if self.new_type else SI7021()
 
    def check_temperature(self):
      if self.new_type:
-        return self.sensor().check_celsius()
+        return self.check_celsius()
      else:
         return self.sensor().get_tempC()
 
@@ -34,7 +31,7 @@ class TempSensor(object):
        return self.sensor().get_tempC()
 
    def check_fahrenheit(self):
-     return (self.get_celsius() * 9/5) + 32
+     return (self.check_celsius() * 9/5) + 32
 
    def check_humidity(self):
      if self.new_type:

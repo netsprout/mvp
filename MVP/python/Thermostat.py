@@ -18,7 +18,7 @@ def adjust_thermostat(temp=None, test=False):
     """
     if temp == None:
         sensor = TempSensor()
-        temp = senor.check_temperature()
+        temp = sensor.check_temperature()
     fan = Fan()
     fan.adjust(temp, test)
 
